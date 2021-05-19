@@ -1,8 +1,8 @@
 import base64
 import json
+import requests
 import os
 from typing import Dict, Optional
-from google.cloud import pubsub_v1
 from data import Event, Data, JobState, JsonPayload
 from _logging import get_logger
 
@@ -24,20 +24,46 @@ def check_job_state(data: Data) -> Optional[JobState]:
     else:
         return None
 
+def get_slack_user_name(email: str) -> str:
+    bot_token = os.environ.get('SLACK_BOT_TOKEN')
+    response = requests.get(f'https://slack.com/api/users.lookupByEmail?email={email}', headers= {'Authorization': f'Bearer {bot_token}'})
+    slack_user_name = response['user']['name']
+
+    if response.status_code != 200:
+        raise ValueError(
+            'Request to slack returned an error %s, the response is:\n%s'
+            % (response.status_code, response.text)
+        )
+    return slack_user_name
+
+def send_message(message: Dict) -> None:
+    # Set the webhook_url to the one provided by Slack when you create the webhook at https://my.slack.com/services/new/incoming-webhook/
+    webhook_url = os.environ.get('SLACK_WEBHOOK_URI')
+    channel_name = os.environ.get('SLACK_CHANNEL_NAME')
+    slack_message_template = "@{slack_user_name} => JOB *{job_id}* state is: `{job_state}`"
+    email = 'ahmed.abdelwahab@swvl.com'
+    slack_user_name = get_slack_user_name(email)
+    response = requests.post(
+        webhook_url, data=json.dumps({
+            'parse': 'full',
+            'link_names': 1,
+            'channel': channel_name,
+            'text': slack_message_template.format(slack_user_name=slack_user_name, job_id=message['job_id'], job_state=message['job_state'])     
+        }),
+        headers={'Content-Type': 'application/json'}
+    )
+    if response.status_code != 200:
+        raise ValueError(
+            'Request to slack returned an error %s, the response is:\n%s'
+            % (response.status_code, response.text)
+        )
 
 def maybe_publish_message(message: Dict) -> None:
 
     logger = get_logger()
 
-    if os.environ.get("TARGET_TOPIC"):
-        publisher = pubsub_v1.PublisherClient()
-        future = publisher.publish(
-            topic=os.environ.get("TARGET_TOPIC"),
-            data=json.dumps(message).encode("utf-8"),
-        )
-        logger.info("Message was published.")
-    else:
-        logger.info("Environment variable TARGET_TOPIC is not found.")
+    send_message(message)
+    logger.info("Message was published.")
 
 
 def main(event_dict: Dict, context) -> Dict:

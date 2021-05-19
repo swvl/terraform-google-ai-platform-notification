@@ -3,6 +3,12 @@ variable "project_id" {
   description = "Google Cloud Platform project ID."
 }
 
+variable "region" {
+  type = string
+  default = "us-east1"
+  description = "Google cloud Region for resources"
+}
+
 variable "log_topic" {
   type        = string
   default     = "ai-platform-log"
