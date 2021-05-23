@@ -4,8 +4,8 @@ import requests
 import re
 import os
 from typing import Dict
-from .data import Event, Data, JobState, JsonPayload
-from ._logging import get_logger
+from data import Event, Data, JobState, JsonPayload
+from _logging import get_logger
 from googleapiclient.discovery import build
 
 ml = build('ml', 'v1')
@@ -99,8 +99,3 @@ def main(event, context):
     email = extract_email_from_job(job)
     message = {'email': email, 'job_id': job['jobId'], 'job_error_message': job.get('errorMessage'), 'job_state': job['state']}
     send_message(message)
-
-
-
-
-main({ "@type": "type.googleapis.com/google.pubsub.v1.PubsubMessage", "attributes": { "logging.googleapis.com/timestamp": "2021-05-23T10:45:21.131Z" }, "data": "eyJpbnNlcnRJZCI6Ii1zMG54eWRjeG1hIiwianNvblBheWxvYWQiOnsibWVzc2FnZSI6IlZhbGlkYXRpbmcgam9iIHJlcXVpcmVtZW50cy4uLiJ9LCJsYWJlbHMiOnsibWwuZ29vZ2xlYXBpcy5jb20vZW5kcG9pbnQiOiJtbC5nb29nbGVhcGlzLmNvbSJ9LCJsb2dOYW1lIjoicHJvamVjdHMvc3d2bC1zYW5kYm94L2xvZ3MvbWwuZ29vZ2xlYXBpcy5jb20lMkZ0ZXN0X2JpZ3NlYXJjaF8xIiwicmVjZWl2ZVRpbWVzdGFtcCI6IjIwMjEtMDUtMjNUMTA6NDU6MjEuNjM2MDA2ODY2WiIsInJlc291cmNlIjp7ImxhYmVscyI6eyJqb2JfaWQiOiJ0ZXN0X2JpZ3NlYXJjaF8xIiwicHJvamVjdF9pZCI6InN3dmwtc2FuZGJveCIsInRhc2tfbmFtZSI6InNlcnZpY2UifSwidHlwZSI6Im1sX2pvYiJ9LCJzZXZlcml0eSI6IklORk8iLCJ0aW1lc3RhbXAiOiIyMDIxLTA1LTIzVDEwOjQ1OjIxLjEzMVoifQ==" }, None)
