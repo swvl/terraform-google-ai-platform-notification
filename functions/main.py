@@ -35,13 +35,14 @@ def check_job_state(data):
 def get_slack_user_name(email: str) -> str:
     bot_token = os.environ.get('SLACK_BOT_TOKEN')
     response = requests.get(f'https://slack.com/api/users.lookupByEmail?email={email}', headers= {'Authorization': f'Bearer {bot_token}'})
-    slack_user_name = response['user']['name']
-
+    
     if response.status_code != 200:
         raise ValueError(
             'Request to slack returned an error %s, the response is:\n%s'
             % (response.status_code, response.text)
         )
+    print(f'getting slack name {response.json()}')
+    slack_user_name = response.json()['user']['name']
     return slack_user_name
 
 def get_message(message: Dict) -> str:
@@ -92,6 +93,7 @@ def main(event, context):
     """
     logger = get_logger()
     pubsub_message = base64.b64decode(event['data']).decode('utf-8')
+    logger.info(f'Event: {json.dumps(event)}')
     event_data = json.loads(pubsub_message)
     data = Data(**event_data)
     logger.info(f'data: {json.dumps(event_data)}')
