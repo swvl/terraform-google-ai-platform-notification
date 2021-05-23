@@ -26,10 +26,6 @@ jobs:
         working-directory: functions
         run: black --diff --check .
 
-      - name: Unit tests
-        working-directory: functions
-        run: pytest -sv .
-
   terraform:
 
     runs-on: ubuntu-20.04
