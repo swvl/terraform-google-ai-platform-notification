@@ -4,8 +4,8 @@ import requests
 import re
 import os
 from typing import Dict, Optional
-from .data import Event, Data, JobState, JsonPayload
-from ._logging import get_logger
+from data import Data, JobState, JsonPayload
+from _logging import get_logger
 from googleapiclient.discovery import build
 
 ml = build('ml', 'v1')
@@ -128,4 +128,4 @@ def main(event, context):
     message = {'email': email, 'job_id': job['jobId'], 'job_error_message': job.get('errorMessage'), 'job_state': job_state}
     send_message(message)
 
-main({"@type": "type.googleapis.com/google.pubsub.v1.PubsubMessage", "attributes": {"logging.googleapis.com/timestamp": "2021-05-23T23:57:10.343201317Z"}, "data": "eyJpbnNlcnRJZCI6IjEweDJhcmtjdGM1IiwibGFiZWxzIjp7Im1sLmdvb2dsZWFwaXMuY29tL2VuZHBvaW50IjoiIn0sImxvZ05hbWUiOiJwcm9qZWN0cy9zd3ZsLXNhbmRib3gvbG9ncy9tbC5nb29nbGVhcGlzLmNvbSUyRnRlc3RfZHVyYXRpb25zX3BhcmFsbGVsXzEiLCJyZWNlaXZlVGltZXN0YW1wIjoiMjAyMS0wNS0yM1QyMzo1NzoxMS4xMzE3OTIyMjFaIiwicmVzb3VyY2UiOnsibGFiZWxzIjp7ImpvYl9pZCI6InRlc3RfZHVyYXRpb25zX3BhcmFsbGVsXzEiLCJwcm9qZWN0X2lkIjoic3d2bC1zYW5kYm94IiwidGFza19uYW1lIjoic2VydmljZSJ9LCJ0eXBlIjoibWxfam9iIn0sInNldmVyaXR5IjoiSU5GTyIsInRleHRQYXlsb2FkIjoiV2FpdGluZyBmb3IgdHJhaW5pbmcgcHJvZ3JhbSB0byBzdGFydC4iLCJ0aW1lc3RhbXAiOiIyMDIxLTA1LTIzVDIzOjU3OjEwLjM0MzIwMTMxN1oifQ=="}, None)
+# main({"@type": "type.googleapis.com/google.pubsub.v1.PubsubMessage", "attributes": {"logging.googleapis.com/timestamp": "2021-05-23T23:57:10.343201317Z"}, "data": "eyJpbnNlcnRJZCI6IjEweDJhcmtjdGM1IiwibGFiZWxzIjp7Im1sLmdvb2dsZWFwaXMuY29tL2VuZHBvaW50IjoiIn0sImxvZ05hbWUiOiJwcm9qZWN0cy9zd3ZsLXNhbmRib3gvbG9ncy9tbC5nb29nbGVhcGlzLmNvbSUyRnRlc3RfZHVyYXRpb25zX3BhcmFsbGVsXzEiLCJyZWNlaXZlVGltZXN0YW1wIjoiMjAyMS0wNS0yM1QyMzo1NzoxMS4xMzE3OTIyMjFaIiwicmVzb3VyY2UiOnsibGFiZWxzIjp7ImpvYl9pZCI6InRlc3RfZHVyYXRpb25zX3BhcmFsbGVsXzEiLCJwcm9qZWN0X2lkIjoic3d2bC1zYW5kYm94IiwidGFza19uYW1lIjoic2VydmljZSJ9LCJ0eXBlIjoibWxfam9iIn0sInNldmVyaXR5IjoiSU5GTyIsInRleHRQYXlsb2FkIjoiV2FpdGluZyBmb3IgdHJhaW5pbmcgcHJvZ3JhbSB0byBzdGFydC4iLCJ0aW1lc3RhbXAiOiIyMDIxLTA1LTIzVDIzOjU3OjEwLjM0MzIwMTMxN1oifQ=="}, None)
