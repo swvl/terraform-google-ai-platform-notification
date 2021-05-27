@@ -7,7 +7,7 @@ data "archive_file" "functions" {
 
 # Cloud Storage bucket to save Cloud Functions' source code.
 resource "google_storage_bucket" "functions" {
-  name          = "${var.project_id}-ai-platform-notification"
+  name          = "${var.project_id}-ai-platform-notification-function"
   location      = var.region
   project       = var.project_id
   storage_class = "regional"
@@ -33,9 +33,11 @@ resource "google_cloudfunctions_function" "function" {
     event_type = "google.pubsub.topic.publish"
     resource   = google_pubsub_topic.ai_platform_log.id
   }
-  # environment_variables = {
-  #   TARGET_TOPIC = google_pubsub_topic.ai_platform_notification.id
-  # }
+  environment_variables = {
+    SLACK_WEBHOOK_URI = var.slack_webhook_uri
+    SLACK_BOT_TOKEN = var.slack_bot_token
+    SLACK_CHANNEL_NAME = var.slack_channel_name
+  }
 }
 
 # Pub/Sub topic to receive AI Platform logs.

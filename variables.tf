@@ -20,3 +20,15 @@ variable "notification_topic" {
   default     = "ai-platform-notification"
   description = "Pub/Sub topic name for notification message."
 }
+
+variable "slack_webhook_uri" {
+  type = string
+}
+
+variable "slack_channel_name" {
+  type = string
+}
+
+variable "slack_bot_token" {
+  type = string
+}
