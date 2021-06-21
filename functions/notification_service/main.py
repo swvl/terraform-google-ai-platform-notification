@@ -19,7 +19,7 @@ def check_job_state(data: Data) -> Optional[JobState]:
     if isinstance(data.textPayload, str):
         if "completed successfully" in data.textPayload:
             return JobState.SUCCEEDED
-        elif "failed" in data.textPayload:
+        elif "failed" in data.textPayload or data.severity == 'ERROR':
             return JobState.FAILED
         elif "cancelled" in data.textPayload:
             return JobState.CANCELLED

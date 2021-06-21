@@ -41,3 +41,4 @@ class Data(BaseModel):
     resource: Resource
     textPayload: Optional[str]
     jsonPayload: Optional[JsonPayload]
+    severity: str
